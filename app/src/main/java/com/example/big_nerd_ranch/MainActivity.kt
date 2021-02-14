@@ -3,10 +3,18 @@ package com.example.big_nerd_ranch
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.Gravity
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.viewModels
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders.of
+import androidx.lifecycle.ViewModelStores.of
 import com.example.big_nerd_ranch.model.Question
+import java.util.EnumSet.of
+import java.util.List.of
 
 private const val TAG = "MainActivity"
 
@@ -32,6 +40,11 @@ class MainActivity : AppCompatActivity() {
         Log.d(TAG,"onCreate(Bundle?) called")
         setContentView(R.layout.activity_main)
 
+//        val provider: ViewModelProvider = ViewModelProvider.of(this)
+//        val quizViewModel = provider.get(QuizViewModel::class.java)
+        val quizViewModel: QuizViewModel by viewModels()
+        Log.d(TAG,"Got a QuizViewModel: $quizViewModel")
+
         trueButton = findViewById(R.id.true_button)
         falseButton = findViewById(R.id.false_button)
         nextButton = findViewById(R.id.next_button)
@@ -46,17 +59,14 @@ class MainActivity : AppCompatActivity() {
 //            Toast.makeText(this,R.string.incorrect_toast,Toast.LENGTH_SHORT).show()
             checkAnswer(false)
         }
-
         nextButton.setOnClickListener {
             curretIndex = (curretIndex + 1) % questionBank.size
             updateQuestion()
         }
-
         prevButton.setOnClickListener {
-            curretIndex = (curretIndex - 1) % questionBank.size
+            curretIndex = (curretIndex - 1 + questionBank.size) % questionBank.size
             updateQuestion()
         }
-
         updateQuestion()
     }
 
@@ -64,32 +74,26 @@ class MainActivity : AppCompatActivity() {
         super.onStart()
         Log.d(TAG,"onStart() called")
     }
-
     override fun onPause() {
         super.onPause()
         Log.d(TAG,"onPause() called")
     }
-
     override fun onResume() {
         super.onResume()
         Log.d(TAG,"onResume() called")
     }
-
     override fun onStop() {
         super.onStop()
         Log.d(TAG,"onStop() called")
     }
-
     override fun onDestroy() {
         super.onDestroy()
         Log.d(TAG,"onDestroy() called")
     }
-
     private fun updateQuestion() {
         val questionTextResId = questionBank[curretIndex].textResId
         questionTextView.setText(questionTextResId)
     }
-
     private fun checkAnswer(userAnswer: Boolean){
         val correctAnswer = questionBank[curretIndex].answer
 
@@ -99,6 +103,8 @@ class MainActivity : AppCompatActivity() {
             R.string.incorrect_toast
         }
 
-        Toast.makeText(this,messageResId, Toast.LENGTH_SHORT).show()
+        val myToast=Toast.makeText(this,messageResId, Toast.LENGTH_SHORT)
+            myToast.setGravity(Gravity.TOP,0,0)
+            myToast.show()
     }
 }
