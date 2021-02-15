@@ -13,11 +13,13 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders.of
 import androidx.lifecycle.ViewModelStores.of
 import com.example.big_nerd_ranch.model.Question
+import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.activity_main.*
 import java.util.EnumSet.of
 import java.util.List.of
 
 private const val TAG = "MainActivity"
-
+private const val KEY_INDEX = "index"
 
 class MainActivity : AppCompatActivity() {
 
@@ -33,6 +35,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         Log.d(TAG,"onCreate(Bundle?) called")
         setContentView(R.layout.activity_main)
+
+        val currentIndex = savedInstanceState?.getInt(KEY_INDEX,0) ?: 0
+        quizViewModel.curretIndex = currentIndex
         // state interface
 //        val quizViewModel: QuizViewModel by viewModels()
 //        Log.d(TAG,"Got a QuizViewModel: $quizViewModel")
@@ -76,6 +81,13 @@ class MainActivity : AppCompatActivity() {
         super.onResume()
         Log.d(TAG,"onResume() called")
     }
+    // сохранение данных при засыпании приложения
+    override fun onSaveInstanceState(savedInstanceState: Bundle) {
+        super.onSaveInstanceState(savedInstanceState)
+        Log.i(TAG, "onSaveInstanceState")
+        savedInstanceState.putInt(KEY_INDEX,quizViewModel.curretIndex)
+    }
+
     override fun onStop() {
         super.onStop()
         Log.d(TAG,"onStop() called")
@@ -98,9 +110,10 @@ class MainActivity : AppCompatActivity() {
         }else {
             R.string.incorrect_toast
         }
-
         val myToast=Toast.makeText(this,messageResId, Toast.LENGTH_SHORT)
             myToast.setGravity(Gravity.TOP,0,0)
             myToast.show()
+            Snackbar.make(activity_main_container, messageResId, 3000).setAction(getString(R.string.snack_bar_message)) {
+            }.show()
     }
 }
