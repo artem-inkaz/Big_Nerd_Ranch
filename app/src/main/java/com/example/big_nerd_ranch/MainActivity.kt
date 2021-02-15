@@ -1,5 +1,6 @@
 package com.example.big_nerd_ranch
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -27,6 +28,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var falseButton: Button
     private lateinit var nextButton: Button
     private lateinit var prevButton: Button
+    private lateinit var cheatButton: Button
     private lateinit var questionTextView: TextView
 
     private  val quizViewModel: QuizViewModel by viewModels()
@@ -46,6 +48,7 @@ class MainActivity : AppCompatActivity() {
         falseButton = findViewById(R.id.false_button)
         nextButton = findViewById(R.id.next_button)
         prevButton = findViewById(R.id.prev_button)
+        cheatButton = findViewById((R.id.cheat_button))
         questionTextView = findViewById(R.id.question_text_view)
 
         trueButton.setOnClickListener {
@@ -65,6 +68,13 @@ class MainActivity : AppCompatActivity() {
 //            curretIndex = (curretIndex - 1 + questionBank.size) % questionBank.size
             quizViewModel.moveToPrevious()
             updateQuestion()
+        }
+        cheatButton.setOnClickListener {
+//           val intent = Intent(this, CheatActivity::class.java)
+        val answerIsTrue = quizViewModel.currentQuestionAnswer
+        val intent = CheatActivity.newIntent(this@MainActivity, answerIsTrue)
+            startActivity(intent)
+
         }
         updateQuestion()
     }
