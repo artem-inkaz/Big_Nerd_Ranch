@@ -21,6 +21,7 @@ import java.util.List.of
 
 private const val TAG = "MainActivity"
 private const val KEY_INDEX = "index"
+private const val REQUEST_CODE_CHEAT = 0
 
 class MainActivity : AppCompatActivity() {
 
@@ -73,8 +74,9 @@ class MainActivity : AppCompatActivity() {
 //           val intent = Intent(this, CheatActivity::class.java)
         val answerIsTrue = quizViewModel.currentQuestionAnswer
         val intent = CheatActivity.newIntent(this@MainActivity, answerIsTrue)
-            startActivity(intent)
-
+//            startActivity(intent)
+            // 6.13
+            startActivityForResult(intent,REQUEST_CODE_CHEAT)
         }
         updateQuestion()
     }
