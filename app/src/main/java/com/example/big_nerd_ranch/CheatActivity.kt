@@ -1,14 +1,17 @@
 package com.example.big_nerd_ranch
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.TextView
 import androidx.activity.viewModels
+import kotlinx.android.synthetic.main.activity_cheat.*
 
 private const val EXTRA_ANSWER_IS_TRUE =
     "com.example.big_nerd_ranch.answer_is_true"
@@ -20,7 +23,9 @@ class CheatActivity : AppCompatActivity() {
     private var answerIsTrue = false
     private var wasCheated = false
     private lateinit var answerTextView: TextView
+    private lateinit var tVApiLevel: TextView
     private lateinit var showAnswerButton: Button
+
     private  val quizViewModel: QuizViewModel by viewModels()
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
@@ -28,6 +33,7 @@ class CheatActivity : AppCompatActivity() {
         outState.putBoolean(KEY_WAS_CHEATED, wasCheated)
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_cheat)
@@ -35,9 +41,15 @@ class CheatActivity : AppCompatActivity() {
         wasCheated = savedInstanceState?.getBoolean(KEY_WAS_CHEATED, false) ?: false
         setAnswerShownResult(wasCheated)
 
+
+
         answerIsTrue = intent.getBooleanExtra(EXTRA_ANSWER_IS_TRUE, false)
         answerTextView = findViewById(R.id.answer_text_view)
         showAnswerButton = findViewById(R.id.show_answer_button)
+        tVApiLevel = findViewById(R.id.tVApiLevel)
+        tVApiLevel.text =getString(R.string.text_api_level) + Build.VERSION.SDK_INT.toString()
+
+
         showAnswerButton.setOnClickListener {
             // Closing Loopholes for Cheaters
             wasCheated = true

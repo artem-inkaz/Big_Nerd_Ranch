@@ -1,7 +1,10 @@
 package com.example.big_nerd_ranch
 
+import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.ActivityOptions
 import android.content.Intent
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -9,7 +12,9 @@ import android.view.Gravity
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import android.widget.Toast.makeText
 import androidx.activity.viewModels
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders.of
@@ -34,14 +39,16 @@ class MainActivity : AppCompatActivity() {
     private lateinit var cheatButton: Button
     private lateinit var questionTextView: TextView
 
-    private  val quizViewModel: QuizViewModel by viewModels()
+    private val quizViewModel: QuizViewModel by viewModels()
 
+    @RequiresApi(Build.VERSION_CODES.M)
+    @SuppressLint("RestrictApi")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d(TAG,"onCreate(Bundle?) called")
+        Log.d(TAG, "onCreate(Bundle?) called")
         setContentView(R.layout.activity_main)
 
-        val currentIndex = savedInstanceState?.getInt(KEY_INDEX,0) ?: 0
+        val currentIndex = savedInstanceState?.getInt(KEY_INDEX, 0) ?: 0
         quizViewModel.curretIndex = currentIndex
         // state interface
 //        val quizViewModel: QuizViewModel by viewModels()
@@ -63,6 +70,7 @@ class MainActivity : AppCompatActivity() {
             checkAnswer(false)
         }
         nextButton.setOnClickListener {
+            quizViewModel.isCheater= false
             quizViewModel.moveToNext()
 //            curretIndex = (curretIndex + 1) % questionBank.size
             updateQuestion()
@@ -72,16 +80,34 @@ class MainActivity : AppCompatActivity() {
             quizViewModel.moveToPrevious()
             updateQuestion()
         }
+        var tokens = 3
         cheatButton.setOnClickListener {
 //           val intent = Intent(this, CheatActivity::class.java)
-        val answerIsTrue = quizViewModel.currentQuestionAnswer
-        val intent = CheatActivity.newIntent(this@MainActivity, answerIsTrue)
+            if (tokens <= 3 && tokens != 0) {  // Can use also (!(tokens > 3 || tokens == 0))
+                tokens -= 1
+                val answerIsTrue = quizViewModel.currentQuestionAnswer
+                val intent = CheatActivity.newIntent(this@MainActivity, answerIsTrue)
 //            startActivity(intent)
-            // 6.13
-            startActivityForResult(intent,REQUEST_CODE_CHEAT)
+                // 6.13
+                // startActivityForResult(intent,REQUEST_CODE_CHEAT)
+                // 7.1 Animation
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    val options = ActivityOptions
+                            .makeClipRevealAnimation(cheatButton, 0, 0, cheatButton.width, cheatButton.width)
+                    startActivityForResult(intent, REQUEST_CODE_CHEAT, options.toBundle())
+                } else {
+                    startActivityForResult(intent, REQUEST_CODE_CHEAT)
+                }
+            } else {
+                cheatButton.isEnabled = false
+                //makeText(this, "Oh well, you are out of cheats", LENGTH_SHORT).show()
+                Snackbar.make(activity_main_container, "Oh well, you are out of cheats", 3000).setAction(getString(R.string.snack_bar_message)) {
+                }.show()
+            }
         }
-        updateQuestion()
-    }
+//    }
+    updateQuestion()
+}
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
