@@ -1,5 +1,6 @@
 package com.example.big_nerd_ranch
 
+import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -21,7 +22,9 @@ import java.util.List.of
 
 private const val TAG = "MainActivity"
 private const val KEY_INDEX = "index"
-
+private const val REQUEST_CODE_CHEAT = 0
+//private const val EXTRA_ANSWER_SHOWN = "answer_is_shown"
+//private const val IS_CHEATER = "isCheater"
 class MainActivity : AppCompatActivity() {
 
     private lateinit var trueButton: Button
@@ -73,10 +76,21 @@ class MainActivity : AppCompatActivity() {
 //           val intent = Intent(this, CheatActivity::class.java)
         val answerIsTrue = quizViewModel.currentQuestionAnswer
         val intent = CheatActivity.newIntent(this@MainActivity, answerIsTrue)
-            startActivity(intent)
-
+//            startActivity(intent)
+            // 6.13
+            startActivityForResult(intent,REQUEST_CODE_CHEAT)
         }
         updateQuestion()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode != Activity.RESULT_OK){
+            return
+        }
+        if (requestCode == REQUEST_CODE_CHEAT){
+            quizViewModel.isCheater = data?.getBooleanExtra(EXTRA_ANSWER_SHOWN, false) ?: false
+        }
     }
 
     override fun onStart() {
@@ -115,11 +129,18 @@ class MainActivity : AppCompatActivity() {
 //        val correctAnswer = questionBank[curretIndex].answer
         val correctAnswer = quizViewModel.currentQuestionAnswer
 
-        val messageResId = if (userAnswer == correctAnswer){
-            R.string.correct_toast
-        }else {
-            R.string.incorrect_toast
+//        val messageResId = if (userAnswer == correctAnswer){
+//            R.string.correct_toast
+//        }else {
+//            R.string.incorrect_toast
+//        }
+
+        val messageResId = when{
+            quizViewModel.isCheater -> R.string.judment_toast
+            userAnswer == correctAnswer -> R.string.correct_toast
+            else -> R.string.incorrect_toast
         }
+
         val myToast=Toast.makeText(this,messageResId, Toast.LENGTH_SHORT)
             myToast.setGravity(Gravity.TOP,0,0)
             myToast.show()

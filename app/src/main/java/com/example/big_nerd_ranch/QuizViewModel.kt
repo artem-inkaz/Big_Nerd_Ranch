@@ -9,6 +9,8 @@ private const val TAG = "MainActivity"
 class QuizViewModel: ViewModel() {
 
     var curretIndex = 0
+    // отслеживание подглядывания
+    var isCheater = false
 
     private val questionBank = listOf(
         Question(R.string.question_africa,false),
