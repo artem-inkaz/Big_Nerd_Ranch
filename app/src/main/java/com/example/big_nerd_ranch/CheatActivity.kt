@@ -30,6 +30,7 @@ class CheatActivity : AppCompatActivity() {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         Log.i(TAG,"onSaveInstanceState")
+        // Cheated
         outState.putBoolean(KEY_WAS_CHEATED, wasCheated)
     }
 
@@ -40,8 +41,6 @@ class CheatActivity : AppCompatActivity() {
         // Closing Loopholes for Cheaters
         wasCheated = savedInstanceState?.getBoolean(KEY_WAS_CHEATED, false) ?: false
         setAnswerShownResult(wasCheated)
-
-
 
         answerIsTrue = intent.getBooleanExtra(EXTRA_ANSWER_IS_TRUE, false)
         answerTextView = findViewById(R.id.answer_text_view)
