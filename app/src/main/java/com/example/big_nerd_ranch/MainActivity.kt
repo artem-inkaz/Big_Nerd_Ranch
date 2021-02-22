@@ -3,6 +3,7 @@ package com.example.big_nerd_ranch
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.ActivityOptions
+import android.content.ClipData.newIntent
 import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
@@ -12,18 +13,12 @@ import android.view.Gravity
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
-import android.widget.Toast.makeText
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders.of
-import androidx.lifecycle.ViewModelStores.of
-import com.example.big_nerd_ranch.model.Question
+import com.example.big_nerd_ranch.CheatActivity.Companion.newIntent
+import com.example.big_nerd_ranch.CrimeIntent.FragmentCriminalIntent
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.*
-import java.util.EnumSet.of
-import java.util.List.of
 
 private const val TAG = "MainActivity"
 private const val KEY_INDEX = "index"
@@ -38,8 +33,10 @@ class MainActivity : AppCompatActivity() {
     private lateinit var prevButton: Button
     private lateinit var cheatButton: Button
     private lateinit var questionTextView: TextView
-
     private val quizViewModel: QuizViewModel by viewModels()
+    //----------------------------------------------------
+    private lateinit var criminalIntentButton: Button
+    //val fragmentCriminalIntent = FragmentCriminalIntent()
 
     @RequiresApi(Build.VERSION_CODES.M)
     @SuppressLint("RestrictApi")
@@ -47,12 +44,27 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         Log.d(TAG, "onCreate(Bundle?) called")
         setContentView(R.layout.activity_main)
+        // 1 to 7 Chapter
+        GeoQuiz(savedInstanceState)
+        //-----------------------------------------------------------------------
+        // 8 Chapter goto new Activity FragmentCriminalIntent
+          criminalIntentButton = findViewById(R.id.btn_criminal_intent)
+          criminalIntentButton.setOnClickListener {
+              // Variant 1
+                val i = Intent(this,FragmentCriminalIntent::class.java).apply { }
+              startActivity(i)
+              // Variant 2
+//              val intent2 = newIntent(this@MainActivity, false)
+//              startActivity(intent2)
+            }
+    }
 
+    private fun GeoQuiz(savedInstanceState: Bundle?) {
         val currentIndex = savedInstanceState?.getInt(KEY_INDEX, 0) ?: 0
         quizViewModel.curretIndex = currentIndex
         // state interface
-//        val quizViewModel: QuizViewModel by viewModels()
-//        Log.d(TAG,"Got a QuizViewModel: $quizViewModel")
+        //        val quizViewModel: QuizViewModel by viewModels()
+        //        Log.d(TAG,"Got a QuizViewModel: $quizViewModel")
 
         trueButton = findViewById(R.id.true_button)
         falseButton = findViewById(R.id.false_button)
@@ -62,32 +74,32 @@ class MainActivity : AppCompatActivity() {
         questionTextView = findViewById(R.id.question_text_view)
 
         trueButton.setOnClickListener {
-//            Toast.makeText(this,R.string.correct_toast,Toast.LENGTH_SHORT).show()
+    //            Toast.makeText(this,R.string.correct_toast,Toast.LENGTH_SHORT).show()
             checkAnswer(true)
         }
         falseButton.setOnClickListener {
-//            Toast.makeText(this,R.string.incorrect_toast,Toast.LENGTH_SHORT).show()
+    //            Toast.makeText(this,R.string.incorrect_toast,Toast.LENGTH_SHORT).show()
             checkAnswer(false)
         }
         nextButton.setOnClickListener {
-            quizViewModel.isCheater= false
+            quizViewModel.isCheater = false
             quizViewModel.moveToNext()
-//            curretIndex = (curretIndex + 1) % questionBank.size
+    //            curretIndex = (curretIndex + 1) % questionBank.size
             updateQuestion()
         }
         prevButton.setOnClickListener {
-//            curretIndex = (curretIndex - 1 + questionBank.size) % questionBank.size
+    //            curretIndex = (curretIndex - 1 + questionBank.size) % questionBank.size
             quizViewModel.moveToPrevious()
             updateQuestion()
         }
         var tokens = 3
         cheatButton.setOnClickListener {
-//           val intent = Intent(this, CheatActivity::class.java)
+    //           val intent = Intent(this, CheatActivity::class.java)
             if (tokens <= 3 && tokens != 0) {  // Can use also (!(tokens > 3 || tokens == 0))
                 tokens -= 1
                 val answerIsTrue = quizViewModel.currentQuestionAnswer
-                val intent = CheatActivity.newIntent(this@MainActivity, answerIsTrue)
-//            startActivity(intent)
+                val intent = newIntent(this@MainActivity, answerIsTrue)
+    //            startActivity(intent)
                 // 6.13
                 // startActivityForResult(intent,REQUEST_CODE_CHEAT)
                 // 7.1 Animation
@@ -105,9 +117,9 @@ class MainActivity : AppCompatActivity() {
                 }.show()
             }
         }
-//    }
-    updateQuestion()
-}
+        //    }
+        updateQuestion()
+    }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -131,13 +143,12 @@ class MainActivity : AppCompatActivity() {
         super.onResume()
         Log.d(TAG,"onResume() called")
     }
-    // сохранение данных при засыпании приложения
+    // сохранение данных при засыпании приложения 1 to 7 Chapter
     override fun onSaveInstanceState(savedInstanceState: Bundle) {
         super.onSaveInstanceState(savedInstanceState)
         Log.i(TAG, "onSaveInstanceState")
         savedInstanceState.putInt(KEY_INDEX,quizViewModel.curretIndex)
     }
-
     override fun onStop() {
         super.onStop()
         Log.d(TAG,"onStop() called")
@@ -146,11 +157,13 @@ class MainActivity : AppCompatActivity() {
         super.onDestroy()
         Log.d(TAG,"onDestroy() called")
     }
+    // 1 to 7 Chapter
     private fun updateQuestion() {
 //        val questionTextResId = questionBank[curretIndex].textResId
         val questionTextResId = quizViewModel.currentQuestionText
         questionTextView.setText(questionTextResId)
     }
+    // 1 to 7 Chapter
     private fun checkAnswer(userAnswer: Boolean){
 //        val correctAnswer = questionBank[curretIndex].answer
         val correctAnswer = quizViewModel.currentQuestionAnswer
@@ -174,3 +187,5 @@ class MainActivity : AppCompatActivity() {
             }.show()
     }
 }
+
+
