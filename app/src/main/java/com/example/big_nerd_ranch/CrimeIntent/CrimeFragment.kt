@@ -47,9 +47,7 @@ class CrimeFragment : Fragment() {
         super.onStart()
 
         val titleWatcher = object : TextWatcher {
-
             override fun beforeTextChanged(sequence: CharSequence?, start: Int, count: Int, after: Int) {
-
             }
 
             override fun onTextChanged(sequence: CharSequence?, start: Int, before: Int, count: Int) {
@@ -57,7 +55,6 @@ class CrimeFragment : Fragment() {
             }
 
             override fun afterTextChanged(sequence: Editable?) {
-                TODO("Not yet implemented")
             }
 
         }
