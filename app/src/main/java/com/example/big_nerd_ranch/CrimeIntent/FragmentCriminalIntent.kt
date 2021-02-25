@@ -25,13 +25,13 @@ class FragmentCriminalIntent: AppCompatActivity() {
 
         if (currentFragment == null){
             // 8.12
-            val fragment = CrimeFragment()
+//            val fragment = CrimeFragment()
+            // 9.4
+            val fragment = CrimeListFragment.neInstance()
             supportFragmentManager
                 .beginTransaction()
                 .add(R.id.fragment_container,fragment)
                 .commit()
         }
-
     }
-
 }

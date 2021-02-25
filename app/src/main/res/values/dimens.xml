@@ -3,4 +3,5 @@
     <dimen name="dimen_text_question">24dp</dimen>
     <dimen name="margin_button">20dp</dimen>
     <dimen name="margin_text">40sp</dimen>
+    <dimen name="padding_item_recycler">8dp</dimen>
 </resources>
