@@ -4,4 +4,5 @@
     <dimen name="margin_button">20dp</dimen>
     <dimen name="margin_text">40sp</dimen>
     <dimen name="padding_item_recycler">8dp</dimen>
+    <dimen name="margin_item_crime">8dp</dimen>
 </resources>
