@@ -1,6 +1,7 @@
 package com.example.big_nerd_ranch.CrimeIntent
 
 import android.content.Context
+import androidx.lifecycle.LiveData
 import androidx.room.Room
 import com.example.big_nerd_ranch.database.CrimeDatabase
 import com.example.big_nerd_ranch.model.Crime
@@ -29,8 +30,11 @@ class CrimeRepository private constructor(context: Context){
     private val crimeDao =database.crimeDao()
 
     // добавляем функции в репозитоий для каждой функции в DAO
-    fun getCrimes(): List<Crime> = crimeDao.getCrimes()
-    fun getCrime(id: UUID): Crime? = crimeDao.getCrime(id)
+//    fun getCrimes(): List<Crime> = crimeDao.getCrimes()
+//    fun getCrime(id: UUID): Crime? = crimeDao.getCrime(id)
+    // добавляем LiveData
+    fun getCrimes(): LiveData<List<Crime>> = crimeDao.getCrimes()
+    fun getCrime(id: UUID): LiveData<Crime?> = crimeDao.getCrime(id)
 
     // 11.9
     companion object {
