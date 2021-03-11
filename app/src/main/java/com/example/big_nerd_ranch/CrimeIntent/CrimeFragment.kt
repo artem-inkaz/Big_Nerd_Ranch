@@ -34,8 +34,8 @@ class CrimeFragment : Fragment() {
         crime = Crime()
         // получаем и загружаем из БД записи
         val crimeId: UUID = arguments?.getSerializable(ARG_CRIME_ID) as UUID
-        Log.d(TAG,"args bundle crimeID: $crimeId")
-        crimeDetailViewModel.loadCrime(crimeId)
+//        Log.d(TAG,"args bundle crimeID: $crimeId")
+//        crimeDetailViewModel.loadCrime(crimeId)
     }
 
     override fun onCreateView(
@@ -90,6 +90,11 @@ class CrimeFragment : Fragment() {
 
             }
         }
+    }
+    // сохранение обновлений при выходе из фрагмента
+    override fun onStop() {
+        super.onStop()
+        crimeDetailViewModel.saveCrime(crime)
     }
 
     private fun updateUI(){

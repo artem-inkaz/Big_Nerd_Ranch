@@ -11,12 +11,16 @@ class CrimeDetailViewModel: ViewModel() {
     private val crimeRepository = CrimeRepository.get()
     private val crimeIdLiveData = MutableLiveData<UUID>()
         // для сохранения объекта Crime полученного из БД
-    val crimeLiveData: LiveData<Crime?> =
+    var crimeLiveData: LiveData<Crime?> =
         Transformations.switchMap(crimeIdLiveData){ crimeId ->
             crimeRepository.getCrime(crimeId)
         }
     // чтобы ViewModel поняла какое преступление необходимо выводить
     fun loadCrime(crimeId: UUID){
         crimeIdLiveData.value = crimeId
+    }
+    // обновление БД еогда пользователь вводить в окне детализации
+    fun saveCrime(crime: Crime){
+        crimeRepository.updateCrime(crime)
     }
 }
