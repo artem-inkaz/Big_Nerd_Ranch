@@ -7,6 +7,8 @@ import com.example.big_nerd_ranch.database.CrimeDatabase
 import com.example.big_nerd_ranch.model.Crime
 import java.lang.IllegalStateException
 import java.util.*
+import java.util.concurrent.Executor
+import java.util.concurrent.Executors
 
 private const val DATABASE_NAME = "crime-database"
 
@@ -33,6 +35,8 @@ class CrimeRepository private constructor(context: Context){
     ).build()
 
     private val crimeDao =database.crimeDao()
+    // исполнитель который ссылается на поток, возвращает экземпляр исполнителя, который указывает на новый поток
+    private val executor = Executors.newSingleThreadExecutor()
 
     // добавляем функции в репозитоий для каждой функции в DAO
 //    fun getCrimes(): List<Crime> = crimeDao.getCrimes()
@@ -40,6 +44,18 @@ class CrimeRepository private constructor(context: Context){
     // добавляем LiveData
     fun getCrimes(): LiveData<List<Crime>> = crimeDao.getCrimes()
     fun getCrime(id: UUID): LiveData<Crime?> = crimeDao.getCrime(id)
+
+    fun updateCrime(crime: Crime){
+        executor.execute{
+            crimeDao.updateCrime(crime)
+        }
+    }
+    fun addCrime(crime: Crime){
+        // выталкивает операции из основного потока, чтобы не блокировать работу UI потока
+        executor.execute {
+            crimeDao.addCrime(crime)
+        }
+    }
 
     // 11.9
     companion object {
