@@ -3,6 +3,7 @@ package com.example.big_nerd_ranch.CrimeIntent
 import android.content.Context
 import android.os.Bundle
 import android.util.AttributeSet
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,8 +11,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.big_nerd_ranch.R
 import com.example.big_nerd_ranch.model.Crime
+import java.util.*
+private const val TAG = "MainActivity"
 
-class FragmentCriminalIntent: AppCompatActivity() {
+class FragmentCriminalIntent: AppCompatActivity(),CrimeListFragment.CallBacks {
 
 //    private lateinit var crime: Crime
 
@@ -33,5 +36,14 @@ class FragmentCriminalIntent: AppCompatActivity() {
                 .add(R.id.fragment_container,fragment)
                 .commit()
         }
+    }
+
+    override fun onCrimeSelected(crimeId: UUID){
+        Log.d(TAG, "MainActivity.onCrimeSelected: $crimeId")
+        val fragment = CrimeFragment()
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.fragment_container, fragment)
+            .commit()
     }
 }

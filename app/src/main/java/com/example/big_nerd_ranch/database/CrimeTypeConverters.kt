@@ -2,6 +2,7 @@ package com.example.big_nerd_ranch.database
 
 import androidx.room.TypeConverter
 import java.util.*
+
 // 11.4
 // Конвертеры типов данных
 class CrimeTypeConverters {
@@ -20,7 +21,7 @@ class CrimeTypeConverters {
         return UUID.fromString(uuid)
     }
     @TypeConverter
-    fun fromUUID(uuid: String?): String? {
-        return uuid.toString()
+    fun fromUUID(uuid: UUID?): String? {
+        return uuid?.toString()
     }
 }

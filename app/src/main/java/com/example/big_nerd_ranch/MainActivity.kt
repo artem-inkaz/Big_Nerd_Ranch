@@ -16,9 +16,11 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import com.example.big_nerd_ranch.CheatActivity.Companion.newIntent
+import com.example.big_nerd_ranch.CrimeIntent.CrimeFragment
 import com.example.big_nerd_ranch.CrimeIntent.FragmentCriminalIntent
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.*
+import java.util.*
 
 private const val TAG = "MainActivity"
 private const val KEY_INDEX = "index"
@@ -186,6 +188,15 @@ class MainActivity : AppCompatActivity() {
             Snackbar.make(activity_main_container, messageResId, 3000).setAction(getString(R.string.snack_bar_message)) {
             }.show()
     }
+
+//  override fun onCrimeSelected(crimeId: UUID){
+//      Log.d(TAG, "MainActivity.onCrimeSelected: $crimeId")
+//      val fragment = CrimeFragment()
+//      supportFragmentManager
+//              .beginTransaction()
+//              .replace(R.id.fragment_container, fragment)
+//              .commit()
+//      }
 }
 
 

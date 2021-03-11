@@ -11,6 +11,8 @@ import android.util.Log
 import android.widget.Button
 import android.widget.TextView
 import androidx.activity.viewModels
+import androidx.lifecycle.ViewModelProviders
+import com.example.big_nerd_ranch.CrimeIntent.CrimeListViewModel
 import kotlinx.android.synthetic.main.activity_cheat.*
 
 private const val EXTRA_ANSWER_IS_TRUE =
@@ -27,6 +29,9 @@ class CheatActivity : AppCompatActivity() {
     private lateinit var showAnswerButton: Button
 
     private  val quizViewModel: QuizViewModel by viewModels()
+//    private val quizViewModel: QuizViewModel by lazy {
+//    ViewModelProviders.of(this).get(QuizViewModel::class.java)
+//}
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         Log.i(TAG,"onSaveInstanceState")

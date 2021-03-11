@@ -1,10 +1,10 @@
-package com.example.big_nerd_ranch.CrimeIntent
+package com.example.big_nerd_ranch
 
 import android.app.Application
-import com.example.big_nerd_ranch.model.Crime
+import com.example.big_nerd_ranch.CrimeIntent.CrimeRepository
 
 // получить информацию о жизненном цикле приложения
-class CriminalIntentApplication: Application() {
+class CriminalIntentApplication : Application() {
 
     // вызывается когда впервые загружается в память,
     // разовая инициализация

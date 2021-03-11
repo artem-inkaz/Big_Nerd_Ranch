@@ -15,16 +15,21 @@ private const val DATABASE_NAME = "crime-database"
 // 11.9
 // CrimeRepository это синглтон что значит в нашем процессе приложения единовременно существует
 // только один его экземпляр
-// Синглтон существует до тех пор пока находится в памяти и хранение в нем любых свойств позволяет получить к ним доступ
+// Синглтон существует до тех пор пока находится в памяти и хранение в нем любых свойств позволяет
+// получить к ним доступ
 // в течении жизненного цикла activity и фрагмента
 class CrimeRepository private constructor(context: Context){
 
     // свойства для хранения ссылки на БД и объекты DAO
     // создание реализации абстрактного класса CrimeDatabase
+    // context т.к. БД обращается к файловой системе context нужно передавать т.к.
+    // синглтон живет дольше чем классы активити
+    // класс БД которую Room должен создать
+    // им файла БД которую создаст Room
     private val database : CrimeDatabase = Room.databaseBuilder(
-        context.applicationContext, //context т.к. БД обращается к файловой системе context нужно передавать т.к. синглтон живет дольше чем классы активити
-        CrimeDatabase::class.java, // класс БД которую Room должен создать
-        DATABASE_NAME // им файла БД которую создаст Room
+        context.applicationContext,
+        CrimeDatabase::class.java,
+        DATABASE_NAME
     ).build()
 
     private val crimeDao =database.crimeDao()
