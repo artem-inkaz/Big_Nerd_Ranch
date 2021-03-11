@@ -3,6 +3,7 @@ package com.example.big_nerd_ranch.CrimeIntent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -12,7 +13,10 @@ import android.widget.CheckBox
 import android.widget.EditText
 import com.example.big_nerd_ranch.R
 import com.example.big_nerd_ranch.model.Crime
+import java.util.*
 
+private const val ARG_CRIME_ID = "CRIME_ID"
+private const val TAG = "CrimeFragment"
 
 class CrimeFragment : Fragment() {
 
@@ -23,6 +27,9 @@ class CrimeFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         crime = Crime()
+        // получаем и загружаем из БД записи
+        val crimeId: UUID = arguments?.getSerializable(ARG_CRIME_ID) as UUID
+        Log.d(TAG,"args bundle crimeID: $crimeId")
     }
 
     override fun onCreateView(
@@ -62,6 +69,17 @@ class CrimeFragment : Fragment() {
         solvedCheckBox.apply {
             setOnCheckedChangeListener { _, isChecked ->crime.isSolved = isChecked
 
+            }
+        }
+    }
+    // создание аргуменов получает UUiD создает экземпляр фрагмента, пакет аргументов, присоеиняет аргументы к фрагменту
+    companion object{
+        fun newInstance(crimeId: UUID): CrimeFragment{
+            val args = Bundle().apply {
+                putSerializable(ARG_CRIME_ID, crimeId)
+            }
+            return CrimeFragment().apply {
+                arguments = args
             }
         }
     }

@@ -40,7 +40,10 @@ class FragmentCriminalIntent: AppCompatActivity(),CrimeListFragment.CallBacks {
 
     override fun onCrimeSelected(crimeId: UUID){
         Log.d(TAG, "MainActivity.onCrimeSelected: $crimeId")
-        val fragment = CrimeFragment()
+        // передаем пустой фрагмент
+//        val fragment = CrimeFragment()
+        // передаем ID преступления
+        val fragment = CrimeFragment.newInstance(crimeId)
         supportFragmentManager
             .beginTransaction()
             .replace(R.id.fragment_container, fragment)
