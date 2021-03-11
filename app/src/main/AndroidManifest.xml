@@ -3,6 +3,7 @@
     package="com.example.big_nerd_ranch">
 
     <application
+        android:name=".CrimeIntent.CriminalIntentApplication"
         android:allowBackup="true"
         android:icon="@drawable/ic_cherepaha"
         android:label="@string/app_name"
