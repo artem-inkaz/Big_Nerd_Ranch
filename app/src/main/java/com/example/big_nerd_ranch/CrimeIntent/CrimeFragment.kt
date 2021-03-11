@@ -11,6 +11,8 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
+import androidx.lifecycle.Observer
+import androidx.fragment.app.viewModels
 import com.example.big_nerd_ranch.R
 import com.example.big_nerd_ranch.model.Crime
 import java.util.*
@@ -24,12 +26,16 @@ class CrimeFragment : Fragment() {
     private lateinit var titleField: EditText
     private lateinit var dateButton: Button
     private lateinit var solvedCheckBox: CheckBox
+
+    private val crimeDetailViewModel: CrimeDetailViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         crime = Crime()
         // получаем и загружаем из БД записи
         val crimeId: UUID = arguments?.getSerializable(ARG_CRIME_ID) as UUID
         Log.d(TAG,"args bundle crimeID: $crimeId")
+        crimeDetailViewModel.loadCrime(crimeId)
     }
 
     override fun onCreateView(
@@ -48,6 +54,19 @@ class CrimeFragment : Fragment() {
             isEnabled = false
         }
         return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        crimeDetailViewModel.crimeLiveData.observe(
+            viewLifecycleOwner,
+            Observer { crime ->
+                crime?.let {
+                    this.crime = crime
+                    updateUI()
+                }
+            }
+        )
     }
 
     override fun onStart() {
@@ -70,6 +89,16 @@ class CrimeFragment : Fragment() {
             setOnCheckedChangeListener { _, isChecked ->crime.isSolved = isChecked
 
             }
+        }
+    }
+
+    private fun updateUI(){
+        titleField.setText(crime.title)
+        dateButton.text = crime.date.toString()
+//        solvedCheckBox.isChecked = crime.isSolved
+        solvedCheckBox.apply {
+            isChecked = crime.isSolved
+            jumpDrawablesToCurrentState() // пропуск анимации
         }
     }
     // создание аргуменов получает UUiD создает экземпляр фрагмента, пакет аргументов, присоеиняет аргументы к фрагменту
