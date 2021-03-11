@@ -26,11 +26,14 @@ class CrimeListFragment : Fragment() {
 
     private val crimeListViewModel: CrimeListViewModel by viewModels()
     private lateinit var crimeRecyclerView: RecyclerView
-    private var adapter: CrimeAdapter? = null
+//    private var adapter: CrimeAdapter? = null
+    // настраиваем на новый список когда они будут отображены в LiveData
+    private var adapter: CrimeAdapter? = CrimeAdapter(emptyList())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d(TAG1, "Total crimes: ${crimeListViewModel.crimes.size}")
+        // удалили из-за LiveData
+//        Log.d(TAG1, "Total crimes: ${crimeListViewModel.crimes.size}")
     }
 
 
@@ -44,14 +47,34 @@ class CrimeListFragment : Fragment() {
             view.findViewById(R.id.crime_recycler_view) as RecyclerView
         crimeRecyclerView.layoutManager = LinearLayoutManager(context)
 
-        updateUI()
+// удалили из-за LiveData
+//        updateUI()
 
+        crimeRecyclerView.adapter = adapter
         return view
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        crimeListViewModel.crimesListLiveData.observe(// используется для регистрации наблюдателя за экземпляром LiveData
+            viewLifecycleOwner,// и связи наблюдения с жизненным циклом другого компонента
+            androidx.lifecycle.Observer { crimes -> // выполняется всегда когда обновляется список LiveData
+                crimes?.let {
+                    Log.i(TAG1, "Got crimes ${crimes.size}")
+                    updateUI(crimes)
+                }
+            })
+    }
+
+// удалили updateUI() из-за LiveData
     // 9/12
-    private fun updateUI(){
-        val crimes = crimeListViewModel.crimes
+//    private fun updateUI(){
+//        val crimes = crimeListViewModel.crimes
+//        adapter = CrimeAdapter(crimes)
+//        crimeRecyclerView.adapter = adapter
+//    }
+    // 11.18
+        private fun updateUI(crimes: List<Crime>){
         adapter = CrimeAdapter(crimes)
         crimeRecyclerView.adapter = adapter
     }

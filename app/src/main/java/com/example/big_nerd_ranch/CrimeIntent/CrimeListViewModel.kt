@@ -23,5 +23,6 @@ class CrimeListViewModel: ViewModel() {
 
     // подгружаем из репозитория
     private val crimeRepository = CrimeRepository.get()
-    val crimes = crimeRepository.getCrimes()
+//    val crimes = crimeRepository.getCrimes()
+    val crimesListLiveData = crimeRepository.getCrimes()
 }
