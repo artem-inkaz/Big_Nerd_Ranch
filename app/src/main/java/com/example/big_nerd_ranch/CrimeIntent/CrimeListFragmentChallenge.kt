@@ -27,7 +27,7 @@ class CrimeListFragmentChallange : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d(TAG, "Total crimes: ${crimeListViewModel.crimes.size}")
+//        Log.d(TAG, "Total crimes: ${crimeListViewModel.crimes.size}")
     }
 
     override fun onCreateView(
@@ -46,8 +46,8 @@ class CrimeListFragmentChallange : Fragment() {
     }
 
     private fun updateUI() {
-        val crimes = crimeListViewModel.crimes
-        adapter = CrimeAdapter(crimes)
+//        val crimes = crimeListViewModel.crimes
+//        adapter = CrimeAdapter(crimes)
         crimeRecyclerView.adapter = adapter
     }
 
@@ -132,12 +132,12 @@ class CrimeListFragmentChallange : Fragment() {
             }
         }
 
-        override fun getItemViewType(position: Int): Int {
-            val crime = crimes[position]
-            return when (crime.requiresPolice) {
-                true -> 1
-                else -> 0
-            }
-        }
+//        override fun getItemViewType(position: Int): Int {
+//            val crime = crimes[position]
+//            return when (crime.requiresPolice) {
+//                true -> 1
+//                else -> 0
+//            }
+//        }
     }
 }
